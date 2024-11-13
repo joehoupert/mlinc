@@ -47,6 +47,12 @@ int main(void){
      *
      * Then determine cost (loss?) via MSE
      *
+     * Then we want to determine which way (and by how much)
+     * we want to adjust our input to the cost function.
+     * We do that, i think, by taking the derivative (kinda)
+     * of the  cost function and making our decision based 
+     * on that result.
+     *
      */
 
     //seed yr random generator
@@ -55,9 +61,15 @@ int main(void){
     float r = rand_float() * 10.0f;
 
     float epsilon = 1e-3;
+    float learning_rate = 1e-3;
 
-    printf("Cost: %f\n",cost(r));
-    printf("Cost: %f\n",cost(r+epsilon));
+    //derivative approx, via finite difference
+    float d = (cost(r + epsilon) - cost(r))/epsilon;
+    printf("%f\n",cost(r));
+
+    /* Need to scale by learning rate or things go wild */
+    r -= d * learning_rate;
+    printf("%f\n",cost(r));
 
     return 0;
 }
