@@ -21,7 +21,7 @@ float rand_float(void){
 }
 
 /* Use MSE to determine cost, TODO: implement other means? */
-float cost(float r){
+float cost(float r, float bias){
     float cost = 0.0f;
 
     for(int i = 0; i < TD_SIZE; i++){
@@ -59,21 +59,25 @@ int main(void){
     srand(time(0));
 
     float r = rand_float() * 10.0f;
+    float bias = rand_float() * 10.0f;
 
     float epsilon = 1e-3;
     float learning_rate = 1e-3;
 
-    printf("%f\n",cost(r));
+    printf("%f\n",cost(r, 0));
 
     for(int i = 0; i < 5000; i++){
         //derivative approx, via finite difference
-        float d = (cost(r + epsilon) - cost(r))/epsilon;
+        float dr = (cost(r + epsilon, bias) - cost(r, bias))/epsilon;
+        float dbias = (cost(r, bias + epsilon) - cost(r, bias))/epsilon;
 
         /* Need to scale by learning rate or things go wild */
-        r -= d * learning_rate;
-        printf("%f\n",cost(r));
+        r -= dr * learning_rate;
+        bias -= dbias * learning_rate;
+        printf("cost: %f  r: %f  bias: %f\n",cost(r, bias), r, bias);
     }
 
+    printf("-------------------------\n");
     printf("%f\n",r);
 
     return 0;
