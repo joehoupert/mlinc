@@ -42,7 +42,7 @@ int main(void){
      * Let's train a neuron!
      *
      * First iteration: just guess a random number
-     * y = x*random_number
+     * y = x*r (a random_number)
      * x = training_data[][0]
      *
      * Then determine cost (loss?) via MSE
@@ -63,13 +63,18 @@ int main(void){
     float epsilon = 1e-3;
     float learning_rate = 1e-3;
 
-    //derivative approx, via finite difference
-    float d = (cost(r + epsilon) - cost(r))/epsilon;
     printf("%f\n",cost(r));
 
-    /* Need to scale by learning rate or things go wild */
-    r -= d * learning_rate;
-    printf("%f\n",cost(r));
+    for(int i = 0; i < 5000; i++){
+        //derivative approx, via finite difference
+        float d = (cost(r + epsilon) - cost(r))/epsilon;
+
+        /* Need to scale by learning rate or things go wild */
+        r -= d * learning_rate;
+        printf("%f\n",cost(r));
+    }
+
+    printf("%f\n",r);
 
     return 0;
 }
